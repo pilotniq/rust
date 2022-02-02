@@ -166,6 +166,14 @@ pub fn check(build: &mut Build) {
     }
 
     for target in &build.targets {
+        // Can't compile for iOS or watchOS unless we're on macOS
+        // added by erland as part of watchos patch, original code is gone.
+        if (target.contains("apple-ios") || target.contains("apple-watchos"))
+           && !build.build.contains("apple-darwin")
+       {
+           panic!("the iOS target is only supported on macOS");
+       }
+
         build
             .config
             .target_config
